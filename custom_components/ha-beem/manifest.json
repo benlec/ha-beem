@@ -1,0 +1,14 @@
+{
+  "domain": "ha-beem",
+  "name": "Beem Solar",
+  "codeowners": ["@benlec"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/benlec/ha-beem",
+  "homekit": {},
+  "iot_class": "cloud_polling",
+  "requirements": ["aiohttp>=3.0.0"],
+  "ssdp": [],
+  "zeroconf": [],
+  "version": "0.1.0"
+}
