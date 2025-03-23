@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "description": "Enter your Beem Solar email address and password",
+                "description": "Enter your Beem Energy email address and password",
                 "data": {
                     "username": "Email address",
                     "password": "Password"

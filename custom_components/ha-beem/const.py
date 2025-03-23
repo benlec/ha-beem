@@ -1,4 +1,4 @@
-"""Constants for the Beem Solar integration."""
+"""Constants for the Beem Energy integration."""
 
 # Base component constants
 NAME = "Beem Energy"

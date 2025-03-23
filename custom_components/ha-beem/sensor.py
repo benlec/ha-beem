@@ -1,4 +1,4 @@
-"""Support for Beem Solar sensors."""
+"""Support for Beem Energy sensors."""
 from __future__ import annotations
 
 import logging
@@ -24,7 +24,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up the Beem Solar sensors."""
+    """Set up the Beem Energy sensors."""
     coordinator: BeemUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
 
     entities = [
@@ -46,7 +46,7 @@ class BeemBaseSensor(CoordinatorEntity, SensorEntity):
         """Return the device info."""
         return DeviceInfo(
             identifiers={(DOMAIN, "solar")},
-            name="Beem Solar",
+            name="Beem Energy",
             manufacturer="Beem Energy",
             model="Beem Kit",
         )

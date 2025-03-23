@@ -1,4 +1,4 @@
-"""Helper functions for the Beem Solar integration."""
+"""Helper functions for the Beem Energy integration."""
 import json
 import logging
 from pathlib import Path

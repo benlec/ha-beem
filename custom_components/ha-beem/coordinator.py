@@ -1,4 +1,4 @@
-"""DataUpdateCoordinator for the Beem Solar integration."""
+"""DataUpdateCoordinator for the Beem Energy integration."""
 import asyncio
 import logging
 from datetime import datetime, timedelta

@@ -1,4 +1,4 @@
-"""Config flow for Beem Solar integration."""
+"""Config flow for Beem Energy integration."""
 from __future__ import annotations
 
 import logging
@@ -46,7 +46,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     return {"title": data[CONF_USERNAME]}
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Beem Solar."""
+    """Handle a config flow for Beem Energy."""
 
     VERSION = 1
 

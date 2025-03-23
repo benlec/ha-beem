@@ -4,9 +4,9 @@
 
 Historical data fetching can now be enabled during the integration setup:
 
-1. When adding the Beem Solar integration, you'll see a "Number of months of historical data to fetch" option
+1. When adding the Beem Energy integration, you'll see a "Number of months of historical data to fetch" option
 2. Enter a number between 0 and 12 to specify how many months of historical data you want to retrieve
-3. The setting can be configured separately for each Beem Solar account:
+3. The setting can be configured separately for each Beem Energy account:
    - Setting 0 (default) will only fetch current month data
    - Setting 1-12 will fetch that many months of historical data
    - For example, setting 3 will fetch data for the current month plus the previous 2 months

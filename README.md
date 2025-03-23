@@ -8,7 +8,7 @@
 [!["Buy Me A Banana"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/benlec)
 
 
-This is a Home Assistant custom component for integrating with Beem Solar, allowing you to monitor your solar power generation data within Home Assistant.
+This is a Home Assistant custom component for integrating with Beem Energy, allowing you to monitor your solar power generation data within Home Assistant.
 
 ## Features
 
@@ -21,14 +21,14 @@ This is a Home Assistant custom component for integrating with Beem Solar, allow
 
 ### Option 1: HACS Installation (Recommended)
 
-HACS is the recommended method to install Beem Solar as it simplifies installation and updates.
+HACS is the recommended method to install Beem Energy as it simplifies installation and updates.
 
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=benlec&repository=ha-beem&category=integration)
 
-To install Beem Solar via HACS:
+To install Beem Energy via HACS:
 
 1.  Click the badge above to add this custom repository to HACS.
-2.  Install the "Beem Solar" integration from HACS.
+2.  Install the "Beem Energy" integration from HACS.
 
 ### Option 2: Manual Installation
 
@@ -40,13 +40,13 @@ To install Beem Solar via HACS:
 
 1. Go to Settings > Devices & Services
 2. Click the "+ Add Integration" button
-3. Search for "Beem Solar"
+3. Search for "Beem Energy"
 4. Follow the configuration steps:
-   - Enter your Beem Solar email address and password
+   - Enter your Beem Energy email address and password
    - Optionally set the number of months of historical data to fetch (0-12 months)
    - Setting a value greater than 0 will retrieve historical energy production data for that many months
-   - Enter your Beem Solar username
-   - Enter your Beem Solar password
+   - Enter your Beem Energy username
+   - Enter your Beem Energy password
 
 ## Available Sensors
 
@@ -62,7 +62,7 @@ You can fetch historical data for specific months using the `fetch_historical_da
 
 To use this service:
 1. Go to Developer Tools > Services
-2. Select the "Beem Solar: Fetch Historical Data" service
+2. Select the "Beem Energy: Fetch Historical Data" service
 3. Enter the month (1-12) and year for which you want to fetch data
 4. Click "Call Service"
 
@@ -71,7 +71,7 @@ The historical data will be stored in your Home Assistant's database and will be
 ## Requirements
 
 - Home Assistant installation
-- Beem Solar account credentials
+- Beem Energy account credentials
 - Internet connection for cloud polling
 
 ## Technical Details

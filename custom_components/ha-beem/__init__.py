@@ -1,4 +1,4 @@
-"""The Beem Solar Integration."""
+"""The Beem Energy Integration."""
 import asyncio
 from datetime import timedelta
 import logging
@@ -16,11 +16,11 @@ SCAN_INTERVAL = timedelta(minutes=1)
 PLATFORMS = ["sensor"]
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Set up the Beem Solar component."""
+    """Set up the Beem Energy component."""
     return True
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Beem Solar from a config entry."""
+    """Set up Beem Energy from a config entry."""
     session = aiohttp_client.async_get_clientsession(hass)
     
     api = BeemApiClient(
