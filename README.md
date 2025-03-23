@@ -1,12 +1,12 @@
-# Beem Solar Integration for Home Assistant
+# Beem Energy Integration for Home Assistant
 
-<img src="/custom_components/ha-beem/brands/logo/logo.png" height="100" align="left"><BR><BR><BR><BR>
-
+![](/custom_components/ha-beem/brands/logo/logo.png)
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
 
 [!["Buy Me A Banana"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/benlec)
+
 
 This is a Home Assistant custom component for integrating with Beem Solar, allowing you to monitor your solar power generation data within Home Assistant.
 
