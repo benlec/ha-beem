@@ -1,0 +1,22 @@
+fetch_historical_data:
+  name: Fetch Historical Data
+  description: Fetch historical energy data for a specific month and year
+  fields:
+    month:
+      name: Month
+      description: Month to fetch data for (1-12)
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 12
+          mode: box
+    year:
+      name: Year
+      description: Year to fetch data for
+      required: true
+      selector:
+        number:
+          min: 2020
+          max: 2024
+          mode: box

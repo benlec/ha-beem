@@ -36,8 +36,14 @@ class BeemApiClient:
                     result = await resp.json()
                     self.access_token = result["token"]
                     return True
+        except asyncio.TimeoutError as err:
+            _LOGGER.error("Timeout while authenticating with Beem API: %s", err)
+            return False
+        except aiohttp.ClientError as err:
+            _LOGGER.error("Client error while authenticating with Beem API: %s", err)
+            return False
         except Exception as err:  # pylint: disable=broad-except
-            _LOGGER.error("Error authenticating with Beem API: %s", err)
+            _LOGGER.error("Unexpected error while authenticating with Beem API: %s", err)
             return False
 
     async def get_box_summary(self, month: int, year: int) -> dict:
@@ -52,6 +58,12 @@ class BeemApiClient:
                 ) as resp:
                     resp.raise_for_status()
                     return await resp.json()
+        except asyncio.TimeoutError as err:
+            _LOGGER.error("Timeout while fetching box summary: %s", err)
+            raise
+        except aiohttp.ClientError as err:
+            _LOGGER.error("Client error while fetching box summary: %s", err)
+            raise
         except Exception as err:  # pylint: disable=broad-except
-            _LOGGER.error("Error getting box summary from Beem API: %s", err)
-            return {}
+            _LOGGER.error("Unexpected error while fetching box summary from Beem API: %s", err)
+            raise

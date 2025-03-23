@@ -2,10 +2,11 @@
     "config": {
         "step": {
             "user": {
-                "description": "Enter your Beem Solar credentials",
+                "description": "Enter your Beem Solar email address and password",
                 "data": {
-                    "username": "Username",
-                    "password": "Password"
+                    "username": "Email address",
+                    "password": "Password",
+                    "fetch_historical": "Number of months of historical data to fetch"
                 }
             }
         },

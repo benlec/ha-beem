@@ -8,6 +8,7 @@ import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME
+from .const import CONF_FETCH_HISTORICAL
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
@@ -51,6 +52,14 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Beem Solar."""
 
     VERSION = 1
+    
+    STEP_USER_DATA_SCHEMA = vol.Schema(
+        {
+            vol.Required(CONF_USERNAME): str,
+            vol.Required(CONF_PASSWORD): str,
+            vol.Optional(CONF_FETCH_HISTORICAL, default=0): vol.All(vol.Coerce(int), vol.Range(min=0, max=12)),
+        }
+    )
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None

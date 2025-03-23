@@ -56,7 +56,7 @@ class BeemMonthlyEnergySensor(BeemBaseSensor):
     """Representation of a Beem monthly energy sensor."""
 
     _attr_device_class = SensorDeviceClass.ENERGY
-    _attr_state_class = SensorStateClass.TOTAL
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
 
     def __init__(self, coordinator: BeemUpdateCoordinator) -> None:
@@ -77,7 +77,7 @@ class BeemDailyEnergySensor(BeemBaseSensor):
     """Representation of a Beem daily energy sensor."""
 
     _attr_device_class = SensorDeviceClass.ENERGY
-    _attr_state_class = SensorStateClass.TOTAL
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
 
     def __init__(self, coordinator: BeemUpdateCoordinator) -> None:
@@ -111,5 +111,12 @@ class BeemPowerSensor(BeemBaseSensor):
     def native_value(self):
         """Return the state of the sensor."""
         if self.coordinator.data is None:
+            return None
+        try:
+            power_value = self.coordinator.data.get("currentPower", 0)
+            return round(float(power_value), 2)
+        except (TypeError, ValueError):
+            _LOGGER.error("Invalid power value received from Beem API")
+            return None
             return None
         return self.coordinator.data.get("power", 0)
