@@ -6,6 +6,7 @@
   "dependencies": [],
   "documentation": "https://github.com/benlec/ha-beem",
   "issue_tracker": "https://github.com/benlec/ha-beem/issues",
+  "icon": "custom_components/ha-beem/icon.png",
   "homekit": {},
   "iot_class": "cloud_polling",
   "requirements": ["aiohttp>=3.0.0"],
