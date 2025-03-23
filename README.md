@@ -1,6 +1,6 @@
 # Beem Solar Integration for Home Assistant
 
-<img src="custom_components/ha-beem/brands/logo/logo.png" height="100" align="left"><BR><BR><BR><BR>
+<img src="/custom_components/ha-beem/brands/logo/logo.png" height="100" align="left"><BR><BR><BR><BR>
 
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
