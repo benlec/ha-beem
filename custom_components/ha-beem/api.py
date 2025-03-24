@@ -1,7 +1,7 @@
 """API client for Beem Energy."""
 from datetime import date
 import logging
-
+import asyncio
 import aiohttp
 import async_timeout
 
@@ -17,7 +17,7 @@ class BeemApiClient:
 
     def __init__(self, username: str, password: str, session: aiohttp.ClientSession, access_token: str | None = None) -> None:
         """Initialize API client."""
-        self.username = username
+        self.email = username
         self.password = password
         self.session = session
         self.access_token = access_token
@@ -26,15 +26,20 @@ class BeemApiClient:
         """Test if we can authenticate with the host."""
         try:
             async with async_timeout.timeout(10):
-                login_data = {"username": self.username, "password": self.password}
+                login_data = {"email": self.email, "password": self.password}
+                api_endoint = f"{API_BASE_URI}/{API_LOGIN}"
                 async with self.session.post(
-                    f"{API_BASE_URI}{API_LOGIN}", json=login_data
+                    api_endoint, json=login_data
                 ) as resp:
                     if resp.status == 404:
+                        _LOGGER.error(f"({api_endpoint})API endpoint not found (404) during authentication.")
                         return False
                     resp.raise_for_status()
                     result = await resp.json()
-                    self.access_token = result["token"]
+                    if 'accessToken' not in result:
+                        _LOGGER.error("No accessToken found in response: %s", result)
+                        return False
+                    self.access_token = result["accessToken"]
                     return True
         except asyncio.TimeoutError as err:
             _LOGGER.error("Timeout while authenticating with Beem API: %s", err)
