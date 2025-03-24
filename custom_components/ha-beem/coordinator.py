@@ -1,68 +1,92 @@
-"""DataUpdateCoordinator for the Beem Energy integration."""
 import asyncio
+from datetime import timedelta
 import logging
-from datetime import datetime, timedelta
-import aiohttp
 
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import (
-    DataUpdateCoordinator,
-    UpdateFailed,
-)
-from homeassistant.util import dt
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import Throttle
 
+from .api import BeemApiClient
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+SCAN_INTERVAL = timedelta(minutes=1)  # Update interval for fetching data
 
 class BeemUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching Beem data."""
+    """Class to manage fetching data from the Beem API."""
 
-    def __init__(self, hass: HomeAssistant, api, config_entry) -> None:
-        """Initialize."""
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        api: BeemApiClient,
+        config_entry,
+    ):
+
+        """Initialize the coordinator."""
+        self.api = api
+        self.config_entry = config_entry
+        self.historical_months = 12  # Always fetch 12 months
+        self._data = None
+        self._historical_data = None
+        self._last_updated = None
+
+        # Initialize the DataUpdateCoordinator
         super().__init__(
             hass,
             _LOGGER,
             name=DOMAIN,
-            update_interval=timedelta(minutes=5),
+            update_interval=SCAN_INTERVAL,
         )
-        self.api = api
-        self.historical_months = config_entry.data.get(CONF_FETCH_HISTORICAL, 0)
-        self.platforms = []
 
     async def _async_update_data(self):
-        """Update data via library."""
-        data = {}
-        now = dt.now()
-        
-        # Always fetch current month
-        current_month_data = await self.fetch_data(now.month, now.year)
-        if current_month_data:
-            data[f"{now.year}-{now.month:02d}"] = current_month_data
-
-        # Fetch historical data if configured
-        for i in range(1, self.historical_months + 1):
-            historical_date = now - timedelta(days=i*30)  # Approximate month calculation
-            month_data = await self.fetch_data(historical_date.month, historical_date.year)
-            if month_data:
-                data[f"{historical_date.year}-{historical_date.month:02d}"] = month_data
-
-        return data
-
-    async def fetch_data(self, month: int, year: int) -> dict | None:
-        """Fetch data for a specific month and year."""
+        """Fetch data from the Beem API."""
         try:
-            return await self.api.get_box_summary(month, year)
-        except Exception as err:  # pylint: disable=broad-except
-            _LOGGER.error("Error fetching data for %d-%02d: %s", year, month, err)
+            # Get current data
+            current_data = await self.api.get_current_data()
+            historical_data = None
+
+            # If historical data is enabled, fetch it
+            if self.historical_months > 0:
+                historical_data = await self.api.get_historical_data(self.historical_months)
+
+            # Store the fetched data
+            self._data = current_data
+            self._historical_data = historical_data
+
+            # Update the last fetched time
+            self._last_updated = asyncio.get_event_loop().time()
+
+            return {
+                "current": self._data,
+                "historical": self._historical_data,
+            }
+        except Exception as err:
+            raise UpdateFailed(f"Error fetching data from Beem API: {err}")
+
+    async def fetch_data(self, month: int, year: int):
+        """Fetch specific historical data based on the provided month and year."""
+        try:
+            return await self.api.get_historical_data_for_month(year, month)
+        except Exception as err:
+            _LOGGER.error("Error fetching historical data: %s", err)
             return None
-        except asyncio.TimeoutError as error:
-            _LOGGER.error("Timeout while updating Beem data: %s", error)
-            return None
-        except aiohttp.ClientError as error:
-            _LOGGER.error("Client error while updating Beem data: %s", error)
-            return None
-        except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.error("Unexpected error while updating Beem data: %s", error)
-            return None
+
+    @property
+    def data(self):
+        """Return the latest data."""
+        return self._data
+
+    @property
+    def historical_data(self):
+        """Return the historical data."""
+        return self._historical_data
+
+    @property
+    def last_updated(self):
+        """Return the last time the data was updated."""
+        return self._last_updated
+
+    async def async_config_entry_first_refresh(self):
+        """Perform the initial data refresh."""
+        await self.async_refresh()
