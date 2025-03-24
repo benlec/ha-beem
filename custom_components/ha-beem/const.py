@@ -7,4 +7,5 @@ VERSION = "0.1.0"
 ISSUE_URL = "https://github.com/benlec/ha-beem/issues"
 
 # Config Constants
-CONF_FETCH_HISTORICAL = "fetch_historical"
+API_BASE_URI= "https://api-x.beem.energy/beemapp"
+API_LOGIN= "user/login"
