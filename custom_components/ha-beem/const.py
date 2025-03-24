@@ -9,3 +9,4 @@ ISSUE_URL = "https://github.com/benlec/ha-beem/issues"
 # Config Constants
 API_BASE_URI= "https://api-x.beem.energy/beemapp"
 API_LOGIN= "user/login"
+API_BOX="box/summary"
