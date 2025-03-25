@@ -15,7 +15,7 @@ from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from . import BeemUpdateCoordinator
+from .coordinator import BeemUpdateCoordinator
 from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class BeemBaseSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
 
     @property
-    def device_info(self):
+    def device_info(self) -> DeviceInfo:
         """Return the device info."""
         return DeviceInfo(
             identifiers={(DOMAIN, "solar")},
@@ -70,7 +70,13 @@ class BeemMonthlyEnergySensor(BeemBaseSensor):
         """Return the state of the sensor."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get("monthlyEnergy", 0) / 1000
+        try:
+            # Use the "totalMonth" key as provided by the API response
+            value = self.coordinator.data.get("totalMonth", 0)
+            return float(value) / 1000
+        except (TypeError, ValueError):
+            _LOGGER.error("Invalid monthly energy value received from Beem API")
+            return None
 
 
 class BeemDailyEnergySensor(BeemBaseSensor):
@@ -91,7 +97,13 @@ class BeemDailyEnergySensor(BeemBaseSensor):
         """Return the state of the sensor."""
         if self.coordinator.data is None:
             return None
-        return self.coordinator.data.get("dailyEnergy", 0) / 1000
+        try:
+            # Use the "totalDay" key from the API response
+            value = self.coordinator.data.get("totalDay", 0)
+            return float(value) / 1000
+        except (TypeError, ValueError):
+            _LOGGER.error("Invalid daily energy value received from Beem API")
+            return None
 
 
 class BeemPowerSensor(BeemBaseSensor):
@@ -113,10 +125,9 @@ class BeemPowerSensor(BeemBaseSensor):
         if self.coordinator.data is None:
             return None
         try:
-            power_value = self.coordinator.data.get("currentPower", 0)
-            return round(float(power_value), 2)
+            # Use the "wattHour" key from the API response
+            value = self.coordinator.data.get("wattHour", 0)
+            return round(float(value), 2)
         except (TypeError, ValueError):
             _LOGGER.error("Invalid power value received from Beem API")
             return None
-            return None
-        return self.coordinator.data.get("power", 0)
