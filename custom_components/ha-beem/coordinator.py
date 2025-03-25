@@ -29,11 +29,17 @@ class BeemUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Fetch data from the Beem API."""
         try:
+            # Get production data from the API
             current_data = await self.api.get_current_production()
 
-            # Instead of assigning to self.data, use async_set_updated_data
-            self.async_set_updated_data(current_data)
+            # Ensure we have a dict instead of a list.
+            if isinstance(current_data, list):
+                if current_data:
+                    current_data = current_data[0]
+                else:
+                    current_data = {}
 
+            # Return the fetched data so the DataUpdateCoordinator can store it in self.data
             return current_data
 
         except Exception as err:
