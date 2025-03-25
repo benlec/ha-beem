@@ -60,17 +60,20 @@ class BeemApiClient:
 
         try:
             async with async_timeout.timeout(10):
-                headers = {"Authorization": f"Bearer {self.access_token}", "Content-Type": "application/json"}
+                headers = {"Authorization": f"{self.access_token}", "Content-Type": "application/json"}
                 payload = {"month": month, "year": year}
                 async with self.session.post(
                     f"{API_BASE_URI}/{API_BOX}",
                     headers=headers,
                     json=payload,
                 ) as resp:
-                    if resp.status != 200:
+                    if resp.status not in (200,201):
                         _LOGGER.error(f"Failed to fetch box summary. Status: {resp.status}")
                         return {}
-                    return await resp.json()
+                    data = await resp.json()
+                    if isinstance(data, list) and data:
+                        return data[0]
+                    return {}
         except asyncio.TimeoutError as err:
             _LOGGER.error("Timeout while fetching box summary: %s", err)
             return {}
@@ -85,4 +88,3 @@ class BeemApiClient:
         """Fetch current production data."""
         today = date.today()
         return await self.get_box_summary(today.month, today.year)
-
